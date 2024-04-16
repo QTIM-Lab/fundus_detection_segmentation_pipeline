@@ -43,16 +43,14 @@ Once you have your dataset like that, you can proceed
 In case you have full fundus images, but want to have the model see images in stereoscopic view, this allows you to create the stereoscopic dataset from the full fundus
 
 ```bash
-
-python create_stereoscopic_dataset.py \
-    --image_input_folder /path/to/images \
+python detection/scripts/preprocess/create_stereoscopic_dataset_from_mask.py \
+    --image_input_folder /path/to/input \
     --label_input_folder /path/to/labels \
-    --output_image_folder /path/to/output/images \
-    --output_label_folder /path/to/output/labels \
-    --crop_min 0.125 \
-    --crop_max 0.175 \
-    --max_offset 0.5
-
+    --output_image_folder /path/to/output \
+    --output_label_folder /path/to/labels/output \
+    --crop_min 0.15 \
+    --crop_max 0.15 \
+    --max_offset 0.0
 ```
 
 # 1. Create COCO dataset
@@ -92,7 +90,7 @@ you should now have:
 
 For example:
 ```bash
-python create_coco_dataset.py \
+python detection/coco/coco_dataset/create_coco_dataset.py \
     --input_folder /path/to/dataset/labels_images \
     --output_folder /path/to/dataset/labels_txt \
     --padding 0
@@ -112,7 +110,7 @@ Given you now have
 You now want to split it into a train and val split, and also appropriately name the folders into COCO format so it can be read by the YAML and processing scripts properly
 
 ```bash
-python create_coco_splits.py \
+python detection/coco/coco_dataset/create_coco_splits.py \
     --images_path /path/to/dataset/images \
     --labels_path /path/to/dataset/labels_txt \
     --output_path /path/to/output \
@@ -121,7 +119,7 @@ python create_coco_splits.py \
 
 4. Create the .yaml
 
-Copy the format specified in the files [coco_example_.yaml](./coco_yamls/examples/coco_example.yaml)
+Copy the format specified in the files [coco_example_.yaml](./coco/coco_yamls/examples/coco_example.yaml)
 
 Specify:
 - path: root path to the data. In the above example it would be /path/to/output
@@ -145,7 +143,7 @@ Go to official docs: [https://github.com/ultralytics/ultralytics?tab=readme-ov-f
 And choose whatever sized model you want. You will then be stuck with that size throughout. I think I used YOLOv8n which is the smallest and had good results but obviously bigger is better but takes longer to train etc
 
 ```bash
-python train_yolo.py \
+python detection/scripts/train/train_yolo.py \
     --data path/to/coco_yaml_.yaml \
     --model path/to/pretrained/model.pt \
     --epochs 200 \
@@ -184,7 +182,7 @@ Once you have that, and you should if you followed instructions so far, just run
 
 ```bash
 
-python create_yolocropped_dataset_multiprocess.py \
+python detection/scripts/infer/create_yolocropped_dataset_multiprocess.py \
     --root_directory /path/to/input/images \
     --output_directory /path/to/output \
     --model_path /path/to/model \
@@ -207,7 +205,7 @@ You now have
 ### Extra - Convert Grayscale Labels to Multichannel
 
 ```bash
-python convert_grayscale_labels_multichannel.py \
+python detection/scripts/convert_labels/convert_grayscale_labels_multichannel.py \
     --input_folder /path/to/labels/ \
     --output_folder /path/to/outputs
 ```
@@ -217,7 +215,7 @@ python convert_grayscale_labels_multichannel.py \
 To collect reporting metrics, run YOLO's val method
 
 ```bash
-python val_yolo.py \
+python detection/scripts/evaluate/val_yolo.py \
     --data /path/to/yaml.yaml \
     --model /path/to/model.pt \
     --imgsz 640 \

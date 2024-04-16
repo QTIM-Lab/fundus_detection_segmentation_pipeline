@@ -42,7 +42,7 @@ clinical/
 jobs/
 
 # YAMLs
-detection/coco_yamls/used
+detection/coco/coco_yamls/used
 
 # Eggs
 *.egg*
