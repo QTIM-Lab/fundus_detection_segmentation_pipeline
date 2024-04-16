@@ -5,10 +5,10 @@ scott.kinder@cuanschutz.edu
 
 # Overview
 
-This repo is broken down into 2 parts:
+This repo is broken down into 2 main parts:
 
-1. [detection_and_crop](./detection/) Detection and Crop
-2. [segmentation_train_and_infer](./segmentation/) Segmentation Train and Inference
+1. [detection](./detection/) Detection and Crop
+2. [segmentation](./segmentation/) Segmentation Train and Inference
 
 # Usage
 
@@ -16,7 +16,7 @@ It is sequential, so Part 1 creates the dataset for Part 2 to use
 
 Both modules have instructions to follow from start to finish
 
-To begin, start with [detection](./detection/) and get a YOLO model to create a cropped dataset which you can then train or evaluate on with your segmentation model in [step 2](./segmentation/)
+To begin, start with [detection](./detection/) and get a YOLO model to create a cropped dataset which you can then train or evaluate on with your [segmentation](./segmentation/) model in step 2
 
 # Prior Assumptions
 
