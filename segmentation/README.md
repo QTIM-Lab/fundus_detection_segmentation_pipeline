@@ -13,6 +13,7 @@ You can now specify those weights to run inference (see [step 3](#3-run-inferenc
 If asked to specify dataset mean and standard deviation, use the following values:
 
 mean: 0.768, 0.476, 0.290
+
 std: 0.220, 0.198, 0.166
 
 # Overview
@@ -45,7 +46,9 @@ python segmentation/scripts/preprocess/find_mean_std_multiprocess.py \
 That will print to the console the results, i.e.
 
 Number of images: 836
+
 Mean: [0.76766771 0.47570729 0.2902386 ]
+
 Standard Deviation: [0.2180807  0.19569278 0.16597114]
 
 # 2. Train the MaskFormer Model
