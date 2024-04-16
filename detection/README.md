@@ -2,7 +2,7 @@
 
 This module shows how to use YOLOv8. Specifically, it shows how to create a COCO dataset, how to train the YOLOv8 model on the COCO dataset, and then run inference to create outputs of cropped images if the detection is above a threshold (i.e. it found your optic nerve head).
 
-## Pretrained YOLO models
+## Pretrained YOLO detection models
 
 If you just want to do inference, you can use these weights. To perform inference, see [step 3](#3-run-inference-with-yolo-model-to-create-cropped-dataset) which refers to the [infer](./scripts/infer/) module
 
@@ -20,16 +20,9 @@ At a high level, these are the steps:
 1. Create COCO dataset
 2. Train YOLO model using COCO dataset
 3. Run inference with YOLO model to create cropped dataset
+4. Evaluate YOLO model performance
 
-The docs go in this order.
-
-Inputs/Outputs from Start to Finish:
-
-Start Input
-- Folder of images and segmentations labels
-
-Finish Output
-- Folder of cropped images, from the trained YOLO model, on the generated COCO dataset
+The docs go in this order
 
 # 0. Gather Original Dataset
 

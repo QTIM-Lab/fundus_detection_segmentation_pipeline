@@ -2,7 +2,7 @@
 
 This module shows how to do segmentation training and inference to collect Cup-Disc Ratios (CDR) using MaskFormer w/ Swin Backbone.
 
-## Segmentation Pretrained model
+## Pretrained Mask2Former segmentation model
 
 To use our model, the model weights can be found in a dropbox here:
 
