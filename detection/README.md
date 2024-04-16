@@ -1,6 +1,6 @@
 # Detection
 
-This module shows how to use YOLOv8. Specifically, it shows how to create a COCO dataset, how to train the YOLOv8 model on the COCO dataset, and then run inference to create outputs of cropped images if the detection is above a threshold (i.e. it found your optic nerve head).
+This module shows how to use YOLOv8. Specifically, it shows how to create a COCO dataset, how to train the YOLOv8 model on the COCO dataset, and then run inference to create cropped outputs.
 
 ## Pretrained YOLO detection models
 
@@ -53,6 +53,8 @@ python detection/scripts/preprocess/create_stereoscopic_dataset_from_mask.py \
     --max_offset 0.0
 ```
 
+Confirm the outputs are correct with the notebook [visualize_stereoscopic_dataset.ipynb](../notebooks/detection/visualize_stereoscopic_dataset.ipynb)
+
 # 1. Create COCO dataset
 
 ## What is a COCO dataset
@@ -96,9 +98,9 @@ python detection/coco/coco_dataset/create_coco_dataset.py \
     --padding 0
 ```
 
-Note the padding of 20 pixels around extent of disc segmentation is still a pretty tight crop. You should see the "[visualize_coco_dataset.ipynb](./visualization_notebooks/visualize_coco_dataset.ipynb)" script to find a good value for you. For me, 20 pixels was good.
-
 This will create the .txt's which you will use along with your original images to train the YOLO model. The paths to these will be specified in a .yaml below
+
+Confirm the output is correct with the notebook [visualize_coco_dataset.ipynb](../notebooks/detection/visualize_coco_dataset.ipynb)
 
 3. Split the dataset into train and val
 
@@ -156,15 +158,7 @@ Even though no path is specified, it ends up making a folder called `./runs/dete
 
 ## Verify That YOLO Training Worked (and find Threshold)
 
-To see some examples of the YOLO output from images in the dataset, refer to the notebook [visualize_yolo_infer.ipynb](./visualization_notebooks/visualize_yolo_infer.ipynb)
-
-That actually shows how to train the model too, but if you want to just load your pretrained, just do:
-
-`model = YOLO('./runs/detect/train1/weights/best.pt')`
-
-Like is done in the [create_yolocropped_dataset_multiprocess.py](./create_yolocropped_dataset_multiprocess.py) script to load pretrained weights
-
-But then it shows predictions and outputs and confidence so you can see what `threshold` will work best for you. For me it was 0.875, but probably could've done 0.9 too, but don't want to throw away too much!
+To see some examples of the YOLO output from images in the dataset, refer to the notebook [visualize_yolo_infer.ipynb](../notebooks/detection/visualize_yolo_infer.ipynb)
 
 ### Recap
 
