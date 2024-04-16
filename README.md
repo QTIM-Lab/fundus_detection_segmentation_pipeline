@@ -7,8 +7,8 @@ scott.kinder@cuanschutz.edu
 
 This repo is broken down into 2 main parts:
 
-1. [detection](./detection/) Detection and Crop
-2. [segmentation](./segmentation/) Segmentation Train and Inference
+1. [detection](./detection/) Detection
+2. [segmentation](./segmentation/) Segmentation
 
 # Usage
 

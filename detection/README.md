@@ -2,6 +2,16 @@
 
 This module shows how to use YOLOv8. Specifically, it shows how to create a COCO dataset, how to train the YOLOv8 model on the COCO dataset, and then run inference to create outputs of cropped images if the detection is above a threshold (i.e. it found your optic nerve head).
 
+## Pretrained YOLO models
+
+If you just want to do inference, you can use these weights. To perform inference, see [step 3](#3-run-inference-with-yolo-model-to-create-cropped-dataset) which refers to the [infer](./scripts/infer/) module
+
+There are two pretrained YOLO models:
+
+For stereoscopic images, use: [stereoscopic detection model](https://www.dropbox.com/scl/fi/tk80ctbitkpjeh3c7uzcr/best_stereoscopic.pt?rlkey=xj7odc68vpnv1qpn7nu5jozrw&dl=0)
+
+For full-fundus images, use: [full fundus detection model](https://www.dropbox.com/scl/fi/plggs9k7nuoo4ncsg4vbx/best_full_fundus.pt?rlkey=laclwxmq248tuay4sz1mz89qc&dl=0)
+
 # Overview
 
 At a high level, these are the steps:
@@ -36,6 +46,8 @@ i.e.:
 Once you have your dataset like that, you can proceed
 
 # 0.5 Create Stereoscopic Dataset
+
+In case you have full fundus images, but want to have the model see images in stereoscopic view, this allows you to create the stereoscopic dataset from the full fundus
 
 ```bash
 
@@ -190,16 +202,7 @@ python create_yolocropped_dataset_multiprocess.py \
 
 ```
 
-
 That will take the images in /path/to/inference/images, run inference on all those images using the `best.pt` weights for a YOLO model in parallel, and save the image cropped to the YOLO output bounding box if the detection was above the threshold (meaning it was a high quality detection and not a spurious one) and resize it to your desired output -- in this case to 512 since that is what Mask2Former takes, but could be 224 for some ViT based model etc.
-
-## 3.1 Use our pretrained YOLO models
-
-There are two pretrained YOLO models:
-
-For stereoscopic images, use: [stereoscopic detection model](https://www.dropbox.com/scl/fi/tk80ctbitkpjeh3c7uzcr/best_stereoscopic.pt?rlkey=xj7odc68vpnv1qpn7nu5jozrw&dl=0)
-
-For full-fundus images, use: [full fundus detection model](https://www.dropbox.com/scl/fi/plggs9k7nuoo4ncsg4vbx/best_full_fundus.pt?rlkey=laclwxmq248tuay4sz1mz89qc&dl=0)
 
 ### Recap
 

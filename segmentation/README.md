@@ -2,23 +2,22 @@
 
 This module shows how to do segmentation training and inference to collect Cup-Disc Ratios (CDR) using MaskFormer w/ Swin Backbone.
 
+## Segmentation Pretrained model
+
+To use our model, the model weights can be found in a dropbox here:
+
+[Link to model weights on dropbox](https://www.dropbox.com/scl/fi/otpvalopjfrzmqhahztfj/model.pt?rlkey=gmdtmp4jedmyxepvw1n7q38sc&dl=0)
+
+You can now specify those weights to run inference (see [step 3](#3-run-inference-and-collect-cdrs) and the [infer](./scripts/infer/) module)
+
 # Overview
 
-This module is broken down into 3 main parts, supported by 3 .py scripts:
+The full module is broken down into 4 main parts, supported by 4 .py scripts:
 
 1. Collect the mean and standard deviation of dataset - [find_mean_std_multiprocess.py](./scripts/preprocess/find_mean_std_multiprocess.py)
 2. Train the MaskFormer model - [train_mask2former.py](./scripts/train/train_mask2former.py)
 3. Run inference on a .csv of image paths to collect CDRs and visualize results - [infer_segment_cdr.py](./scripts/infer/infer_segment_cdr.py)
-
-Inputs/Outputs from Start to Finish:
-
-Start Input
-- Folder of (cropped) images and matching (cropped) segmentation labels - probably came from Step 1 in pipeline, but doesn't necessarily need to (I had a training set of already cropped images and only needed to crop for inference)
-
-Finish Output
-- The statistics
-- A trained MaskFormer model
-- A .csv with results showing predicted CDR for row in the .csv with the image file path, and a folder of outputs showing the visualizations of the segs
+4. Evaluate predictions to get Jaccard and Dice score - [evaluate_metrics_mp.py](./scripts/evaluate/evaluate_metrics_mp.py)
 
 The docs go in this order
 
@@ -99,16 +98,6 @@ It expects:
 - note that I only do 4 num_processes, because this is torch.multiprocessing, not normal CPU multiprocessing, so we dont just want to set it to the number of cores we want to use but rather how much the GPU can handle which is probably most easily found through trial and error
 
 Once that is complete, you will have in the output_root_dir a .csv with CDR predictions for each row in the input_csv, and a folder full of the inference segmentations for every image that it processed. You may want to modify the script to not save the images if you don't need to save them, in which case it should run faster as well
-
-## 3.1 Using our pretrained model
-
-A model has already been pretrained on the public datasets RIGA, Drishti, Refuge-1, and RIM-ONE DL which consisted of a total of 1,919 fundus images of the image nerve head
-
-To use that model, and either do fine-tuning off it, or run inference with it, the model weights can be found in a dropbox here:
-
-[Link to model weights on dropbox](https://www.dropbox.com/scl/fi/otpvalopjfrzmqhahztfj/model.pt?rlkey=gmdtmp4jedmyxepvw1n7q38sc&dl=0)
-
-You can now specify those weights to run inference
 
 # 4. Evaluate Jaccard and Dice
 
