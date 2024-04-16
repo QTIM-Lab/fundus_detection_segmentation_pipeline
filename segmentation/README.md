@@ -10,6 +10,11 @@ To use our model, the model weights can be found in a dropbox here:
 
 You can now specify those weights to run inference (see [step 3](#3-run-inference-and-collect-cdrs) and the [infer](./scripts/infer/) module)
 
+If asked to specify dataset mean and standard deviation, use the following values:
+
+mean: 0.768, 0.476, 0.290
+std: 0.220, 0.198, 0.166
+
 # Overview
 
 The full module is broken down into 4 main parts, supported by 4 .py scripts:
