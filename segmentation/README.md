@@ -1,6 +1,6 @@
 # Segmentation
 
-This module shows how to do segmentation training and inference to collect Cup-Disc Ratios (CDR) using MaskFormer w/ Swin Backbone.
+This module shows how to do segmentation training and inference to collect Cup-Disc Ratios (CDR) using [Mask2Former](https://huggingface.co/docs/transformers/model_doc/mask2former).
 
 ## Pretrained Mask2Former segmentation model
 
