@@ -31,7 +31,7 @@ The docs go in this order
 
 The first step that you should do is collect the mean and standard deviation of your dataset.
 
-Typically for training, when you have a train/val/test split you would collect the mean and std of the train split, and use that when training and validating; if you train without a validation set, you can calculate the train (and formerly val) statistics and use that, and then run inference on test using the train and val statistics.
+Typically normalization is used for this model and therefore we need the mean and std for the data
 
 To get the statistics, run the [find_mean_std_multiprocess.py](./scripts/preprocess/find_mean_std_multiprocess.py) script:
 
@@ -101,11 +101,7 @@ python segmentation/scripts/infer/infer_segment_cdr.py \
 ```
 
 It expects:
-- path to a trained model weights .pt file
-- input_csv to be a csv with all images that you want to run inference on in rows with paths to images, and to provide the column name for that
-- note that I only do 4 num_processes, because this is torch.multiprocessing, not normal CPU multiprocessing, so we dont just want to set it to the number of cores we want to use but rather how much the GPU can handle which is probably most easily found through trial and error
-
-Once that is complete, you will have in the output_root_dir a .csv with CDR predictions for each row in the input_csv, and a folder full of the inference segmentations for every image that it processed. You may want to modify the script to not save the images if you don't need to save them, in which case it should run faster as well
+- input_csv to be a csv with all image files that you want to run inference on in rows with file names, and to provide the column name for that
 
 # 4. Evaluate Jaccard and Dice
 

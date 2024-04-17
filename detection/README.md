@@ -121,7 +121,7 @@ python detection/coco/coco_dataset/create_coco_splits.py \
 
 4. Create the .yaml
 
-Copy the format specified in the files [coco_example_.yaml](./coco/coco_yamls/examples/coco_example.yaml)
+Copy the format specified in the files [coco_example.yaml](./coco/coco_yamls/examples/coco_example.yaml)
 
 Specify:
 - path: root path to the data. In the above example it would be /path/to/output
@@ -138,11 +138,13 @@ You now have:
 
 # 2. Train YOLO Model
 
-Probably the easiest thing: Train the YOLO model. It is literally a two line script, but you do one thing: download pretrained model weights. This is because it is just like when we fine-tune from pretrained it is so much better. You can tweak the code to not include, but for me it was always so beneficial that it almost feels okay to make mandatory to specify to train YOLO model, especially for faster convergence etc
+You must start with a pre-trained model (either ours or a provided one), and will need to download pretrained model weights. You can tweak the code to not include, but it's generally recommended.
 
-Go to official docs: [https://github.com/ultralytics/ultralytics?tab=readme-ov-file#models](https://github.com/ultralytics/ultralytics?tab=readme-ov-file#models)
+To download generic model weights, go to official docs: [https://github.com/ultralytics/ultralytics?tab=readme-ov-file#models](https://github.com/ultralytics/ultralytics?tab=readme-ov-file#models)
 
-And choose whatever sized model you want. You will then be stuck with that size throughout. I think I used YOLOv8n which is the smallest and had good results but obviously bigger is better but takes longer to train etc
+Otherwise, you can download our model weights if using for full fundus or stereoscopic images to detect optic nerve head: [Our Pretrained YOLO detection models](#pretrained-yolo-detection-models)
+
+And choose whatever sized model you want
 
 ```bash
 python detection/scripts/train/train_yolo.py \
@@ -154,7 +156,7 @@ python detection/scripts/train/train_yolo.py \
     --patience 10
 ```
 
-Even though no path is specified, it ends up making a folder called `./runs/detect/train...` and saves all your things there like results and checkpoint/final model weights etc.
+Even though no output path is specified, it ends up making a folder called `./runs/detect/train...` and saves all your things there like results and checkpoint/final model weights etc.
 
 ## Verify That YOLO Training Worked (and find Threshold)
 
@@ -187,14 +189,15 @@ python detection/scripts/infer/create_yolocropped_dataset_multiprocess.py \
 
 ```
 
-That will take the images in /path/to/inference/images, run inference on all those images using the `best.pt` weights for a YOLO model in parallel, and save the image cropped to the YOLO output bounding box if the detection was above the threshold (meaning it was a high quality detection and not a spurious one) and resize it to your desired output -- in this case to 512 since that is what Mask2Former takes, but could be 224 for some ViT based model etc.
+That will take the images in /path/to/inference/images, run inference on all those images using the `best.pt` weights for a YOLO model in parallel.
+
+Images will be cropped and saved if the detection was above the threshold (meaning it was a high quality detection and not a spurious one) and resize it to your desired output size
 
 ### Recap
 
 You now have
 
 - A folder with cropped images where you specified output_directory using the trained YOLO model, from the images you specified in root_directory
-
 
 ### Extra - Convert Grayscale Labels to Multichannel
 
