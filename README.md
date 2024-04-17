@@ -35,8 +35,6 @@ There are requirements.txt files [here](./requirements.txt). This repo really ju
 
 - Pytorch
 - OpenCV (cv2), PIL
-- numpy, pandas, matplotlib
-- ultralytics (for YOLO model)
-- albumentations (for image augmentations)
-
-I highly doubt that in the event you get a missing package that just pip installing it wouldn't work, but feel free to contact me if you think something is missing otherwise I think that's mostly it, and the requirements.txt files
+- Numpy, Pandas, Matplotlib
+- Ultralytics (for YOLO model)
+- Albumentations (for image augmentations)
