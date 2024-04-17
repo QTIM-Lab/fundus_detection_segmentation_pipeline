@@ -5,10 +5,11 @@ scott.kinder@cuanschutz.edu
 
 # Overview
 
-This repo is broken down into 2 main parts:
+This repo is broken down into 3 main parts:
 
 1. [detection](./detection/) Detection
 2. [segmentation](./segmentation/) Segmentation
+3. [pipeline](./pipeline/) Pipeline end-to-end
 
 # Architecture
 

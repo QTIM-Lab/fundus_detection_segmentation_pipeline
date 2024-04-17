@@ -2,8 +2,6 @@
 
 Crop and recover segmentation onto a fundus image
 
-Note: Fundus images must have their black edges removed by cropping to largest area with a threshold of 5
-
 ## Usage
 
 ```bash
@@ -18,3 +16,5 @@ python pipeline/scripts/end_to_end.py \
     --cuda_num 0
 
 ```
+
+Note: Suggested for full fundus images to have their black edges removed by cropping to largest area with a threshold of intensity of 5 (very black). Not mandatory, but may help detection model
