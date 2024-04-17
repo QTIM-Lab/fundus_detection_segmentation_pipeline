@@ -75,7 +75,7 @@ python segmentation/scripts/train/train_mask2former.py \
     --num_workers 16
 ```
 
-it expects:
+It expects:
 - input_csv to be a csv with all training data in rows with paths to images and segmentation labels, and provide the column names
 - you to input your datasets mean and std
 - specify other hyperparams
