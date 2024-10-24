@@ -1,7 +1,7 @@
 import argparse
 import pandas as pd
 
-from segmentation_train_and_inference.utils.preprocess_utils import calculate_mean_std
+from segmentation.utils.preprocess_utils import calculate_mean_std
 
 
 def parse_args():

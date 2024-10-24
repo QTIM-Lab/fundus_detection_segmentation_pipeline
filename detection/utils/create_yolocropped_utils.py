@@ -2,7 +2,7 @@ import numpy as np
 import os
 from PIL import Image
 
-from detection_and_crop.utils.detection_utils import cut_xy
+from detection.utils.detection_utils import cut_xy
 
 
 def get_best_coords_and_conf(result_i, threshold):

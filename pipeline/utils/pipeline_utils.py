@@ -3,9 +3,9 @@ import numpy as np
 import os
 import torch
 
-from detection_and_crop.utils.detection_utils import cut_xy
-from detection_and_crop.utils.create_yolocropped_utils import get_best_coords_and_conf, get_cropped_image_and_info
-from segmentation_train_and_inference.utils.infer_utils import get_color_seg
+from detection.utils.detection_utils import cut_xy
+from detection.utils.create_yolocropped_utils import get_best_coords_and_conf, get_cropped_image_and_info
+from segmentation.utils.infer_utils import get_color_seg
 
 
 def get_gray_from_color(color_seg):
@@ -16,13 +16,13 @@ def get_gray_from_color(color_seg):
     return gray_image
 
 
-def yolo_inference_function(model, img_file_path, threshold=1e-6, output_img_size=512, padding=25):
+def yolo_inference_function(model, img_file_path, threshold=0, output_img_size=512, padding=25):
     image = Image.open(img_file_path)
     orig_height = image.height
     orig_width = image.width
     orig_wh = [orig_width, orig_height]
     # print(f'orig height: {orig_height}, orig width: {orig_width}')
-    res = model([image])
+    res = model([image], conf=0)
     res_i = res[0]
 
     best_coords, best_conf = get_best_coords_and_conf(res_i, threshold)

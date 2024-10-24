@@ -4,7 +4,7 @@ from PIL import Image
 import os
 import numpy as np
 
-from segmentation_train_and_inference.utils.infer_utils import get_label_color_seg
+from segmentation.utils.infer_utils import get_label_color_seg
 
 class SegmentationInferenceDataset(Dataset):
     def __init__(self, csv_file, input_root_dir, csv_path_col_name, transform=None, label_col_name=None):

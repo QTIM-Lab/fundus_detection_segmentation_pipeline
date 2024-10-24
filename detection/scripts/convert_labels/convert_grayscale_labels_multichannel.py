@@ -3,7 +3,7 @@ from PIL import Image
 import numpy as np
 import os
 
-from detection_and_crop.utils.convert_grayscale_utils import convert_to_rgb
+from detection.utils.convert_grayscale_utils import convert_to_rgb
 
 
 def parse_args():

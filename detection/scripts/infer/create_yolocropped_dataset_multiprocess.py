@@ -7,8 +7,8 @@ from multiprocessing import Pool, set_start_method, Manager
 import argparse
 import numpy as np
 
-from detection_and_crop.datasets.yolo_inference_dataset import YoloInferenceDataset
-from detection_and_crop.utils.create_yolocropped_utils import process_result
+from detection.datasets.yolo_inference_dataset import YoloInferenceDataset
+from detection.utils.create_yolocropped_utils import process_result
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Process images using YOLO model.")

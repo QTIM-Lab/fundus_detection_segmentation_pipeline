@@ -38,3 +38,34 @@ There are requirements.txt files [here](./requirements.txt). This repo really ju
 - Numpy, Pandas, Matplotlib
 - Ultralytics (for YOLO model)
 - Albumentations (for image augmentations)
+
+## Complete setup
+
+### Download the models
+
+See [Detection](./detection/README.md) and [Segmentation](./segmentation/README.md) modules for link to downloads
+
+### Run from nothing to segmentation output
+
+```sh
+# Clone repo
+git clone https://github.com/QTIM-Lab/fundus_detection_segmentation_pipeline.git
+# Change dir
+cd fundus_detection_segmentation_pipeline
+# Create a venv (recommended)
+python3 -m venv venv
+# Activate venv
+source venv/bin/activate
+# Intall packages
+pip install -r requirements.txt
+# Install repo module
+pip install -e .
+# Run end to end pipeline with params
+python pipeline/scripts/end_to_end.py \
+    --detection_model_path /path/to/detect/model.pt \
+    --segmentation_model_path /path/to/seg/model.pt \
+    --input_dir /path/to/input/images \
+    --output_dir /path/to/output/folder \
+    --dataset_mean 0.768 0.476 0.290 \
+    --dataset_std 0.220 0.198 0.166 \
+    --cuda_num 0

@@ -1,6 +1,4 @@
 import argparse
-from PIL import Image
-from IPython.display import display
 import os
 from ultralytics import YOLO
 import torch
@@ -8,7 +6,7 @@ import numpy as np
 import albumentations as A
 from transformers import MaskFormerImageProcessor, Mask2FormerForUniversalSegmentation
 
-from segmentation_train_and_inference.utils.segmentation_utils import color_palette
+from segmentation.utils.segmentation_utils import color_palette
 from pipeline.utils.pipeline_utils import handle_file
 
 def parse_args():
@@ -42,10 +40,8 @@ def main():
     # Define model
     yolo_model = YOLO(detection_model_path).to(device)
 
-    ADE_MEAN = np.array(dataset_mean)
-    ADE_STD = np.array(dataset_std)
     transform = A.Compose([
-        A.Normalize(mean=ADE_MEAN, std=ADE_STD)
+        A.Normalize(mean=tuple(dataset_mean), std=tuple(dataset_std))
     ])
     palette = color_palette()
     id2label = {

@@ -1,7 +1,7 @@
 import argparse
 import os
 
-from segmentation_train_and_inference.utils.evaluate_utils import get_eval_df, parallel_process, calculate_and_save_stats
+from segmentation.utils.evaluate_utils import get_eval_df, parallel_process, calculate_and_save_stats
 
 
 def parse_args():

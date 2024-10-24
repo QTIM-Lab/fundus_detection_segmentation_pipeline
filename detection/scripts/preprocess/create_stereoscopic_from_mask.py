@@ -6,7 +6,7 @@ import numpy as np
 import random
 import argparse
 
-from detection_and_crop.utils.create_stereoscopic_dataset_utils import square_crop_with_padding
+from detection.utils.create_stereoscopic_dataset_utils import square_crop_with_padding
 
 
 def parse_args():

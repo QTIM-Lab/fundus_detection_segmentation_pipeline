@@ -38,6 +38,9 @@ jobs/segmentation/*.sh
 # Clinical
 clinical/
 
+# Internal markdowns
+internal.md
+
 # Jobs
 jobs/
 

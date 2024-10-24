@@ -16,8 +16,8 @@ import torch
 # from tqdm.auto import tqdm
 import torch.optim.lr_scheduler as lr_scheduler
 
-from segmentation_train_and_inference.datasets.train_datasets import ImageSegmentationDataset
-from segmentation_train_and_inference.utils.segmentation_utils import color_palette
+from segmentation.datasets.train_datasets import ImageSegmentationDataset
+from segmentation.utils.segmentation_utils import color_palette
 
 
 def parse_args():

@@ -7,9 +7,9 @@ from transformers import MaskFormerImageProcessor, Mask2FormerForUniversalSegmen
 import albumentations as A
 from torch.utils.data import DataLoader
 
-from segmentation_train_and_inference.datasets.infer_datasets import SegmentationInferenceDataset
-from segmentation_train_and_inference.utils.segmentation_utils import color_palette
-from segmentation_train_and_inference.utils.infer_utils import process_segmentation, get_data_rows, write_output_csv
+from segmentation.datasets.infer_datasets import SegmentationInferenceDataset
+from segmentation.utils.segmentation_utils import color_palette
+from segmentation.utils.infer_utils import process_segmentation, get_data_rows, write_output_csv
 
 
 def parse_args():
