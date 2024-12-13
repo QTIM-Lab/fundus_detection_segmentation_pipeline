@@ -21,9 +21,11 @@ class ImageSegmentationDataset(Dataset):
         return len(self.images)
     
     def __getitem__(self, idx):
-        path_to_img = os.path.join(self.data_root_dir, self.images[idx])
-        path_to_mask = os.path.join(self.data_root_dir, self.masks[idx])
-             
+        # path_to_img = os.path.join(self.data_root_dir, self.images[idx])
+        path_to_img = self.images[idx]
+        # path_to_mask = os.path.join(self.data_root_dir, self.masks[idx])
+        path_to_mask = self.masks[idx]
+
         original_image = np.array(Image.open(path_to_img))
         original_segmentation_map = np.array(Image.open(path_to_mask).convert('L'))
         original_segmentation_map[original_segmentation_map == 0] = 1

@@ -90,8 +90,8 @@ def main():
     palette = color_palette()
 
     # transforms
-    ADE_MEAN = np.array(dataset_mean)
-    ADE_STD = np.array(dataset_std)
+    ADE_MEAN = dataset_mean
+    ADE_STD = dataset_std
 
     train_transform = A.Compose([
         A.ColorJitter(brightness=jitters[0], contrast=jitters[1], saturation=jitters[2], hue=jitters[3], p=jitters[4]),
@@ -185,7 +185,8 @@ def main():
             running_loss += loss.item()
             num_samples += batch_size
 
-            if idx % 1 == 0:
+            if idx % 10 == 0:
+                print('idx: ', idx)
                 print("Loss: ", loss.item())
 
             # Optimization

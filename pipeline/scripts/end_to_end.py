@@ -13,6 +13,7 @@ def parse_args():
     parser = argparse.ArgumentParser(description="Train MaskFormer model for instance segmentation")
     parser.add_argument("--detection_model_path", type=str, help="Path to trained detection model weights")
     parser.add_argument("--segmentation_model_path", type=str, help="Path to trained segmentation model weights")
+    parser.add_argument("--detection_conf", type=float, default=0.0, help="Cuda device to run on")
     parser.add_argument("--input_dir", type=str, default=None, help="Path to images to run inference on")
     parser.add_argument("--output_dir", type=str, required=True, help="Path to outputs")
     parser.add_argument('--dataset_mean', nargs='+', type=float, help='Array of float values for mean i.e. 0.709 0.439 0.287')
@@ -26,6 +27,7 @@ def main():
     args = parse_args()
     detection_model_path = args.detection_model_path
     segmentation_model_path = args.segmentation_model_path
+    detection_conf = args.detection_conf
     input_dir = args.input_dir
     output_dir = args.output_dir
     dataset_mean = args.dataset_mean
@@ -67,7 +69,7 @@ def main():
         for filename in os.listdir(input_dir):
             print(filename)
             input_file = os.path.join(input_dir, filename)
-            handle_file(input_file, yolo_model, seg_model, transform, preprocessor, palette, device, output_dir)
+            handle_file(input_file, yolo_model, seg_model, transform, preprocessor, palette, device, output_dir, detection_conf)
     else:
         print(f"The folder '{input_dir}' does not exist.")
 

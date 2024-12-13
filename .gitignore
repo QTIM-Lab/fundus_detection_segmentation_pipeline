@@ -5,6 +5,7 @@ __pycache__/
 # Virtual environment
 venv/
 env/
+venv_*
 
 # Jupyter Notebook
 .ipynb_checkpoints/
@@ -19,6 +20,11 @@ env/
 # Output folders
 outputs/
 runs/
+
+# Notebooks
+internal/
+private/
+notebooks/segmentation
 
 # Environment variables file
 .env
@@ -40,6 +46,7 @@ clinical/
 
 # Internal markdowns
 internal.md
+internal.sh
 
 # Jobs
 jobs/

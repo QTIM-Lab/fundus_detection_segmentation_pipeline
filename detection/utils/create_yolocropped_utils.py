@@ -66,33 +66,105 @@ def keep_xywh_within_bounds(x, y, w, h, img_resized, file_name):
 
     return x, y, w, h
 
-def get_cropped_image_and_info(best_coordinates, img, output_image_size, pad, file_name):
+def get_square_bbox_coords(x, y, w, h, pad):
+    """
+    Make bounding box square by extending shorter side and add padding to all sides
+    while maintaining the center of the original bbox
+    """
+    if w > h:
+        # Width is larger, extend height
+        diff = w - h
+        # Adjust y to maintain center
+        y = y - (diff // 2)
+        h = w  # Make height equal to width
+    else:
+        # Height is larger, extend width
+        diff = h - w
+        # Adjust x to maintain center
+        x = x - (diff // 2)
+        w = h  # Make width equal to height
+    
+    # Add padding while maintaining center
+    x = x - pad
+    y = y - pad
+    w = w + (2 * pad)
+    h = h + (2 * pad)
+    
+    return x, y, w, h
+
+def get_rescaled_h_w_no_resize(img, output_image_size, ht, wd, pad):
+    """
+    Get the dimensions for the final crop based on the longer side
+    """
+    # Use the longer dimension to determine the scale factor
+    max_dimension = max(ht, wd)
+    scale_factor = (output_image_size) / max_dimension
+    
+    # Apply the same scale factor to both dimensions to maintain aspect ratio
+    rescaled_h = int(img.height * scale_factor)
+    rescaled_w = int(img.width * scale_factor)
+    
+    return scale_factor, scale_factor, rescaled_h, rescaled_w
+
+def get_new_xy_wh_no_resize(x_val, y_val, sf_w, sf_h, output_image_size, pad):
+    """
+    Calculate the new coordinates and dimensions for the crop
+    """
+    # Scale the coordinates
+    new_x = int(x_val * sf_w)
+    new_y = int(y_val * sf_h)
+    new_w = output_image_size
+    new_h = output_image_size
+    return new_x, new_y, new_w, new_h
+
+
+def get_cropped_image_and_info(best_coordinates, img, output_image_size, pad, file_name, resize_crop=False):
     x = best_coordinates[0]
     y = best_coordinates[1]
     w = best_coordinates[2] - best_coordinates[0]
     h = best_coordinates[3] - best_coordinates[1]
+    if resize_crop:
+        # Rescale the original img such that the disc boundary is square, and
+        # sized output_image_size - pad * 2
+        # if the entire img is going to be 512,512, then the disc extent
+        # should be 512 - pad*2
+        scale_factor_h, scale_factor_w, rescaled_h, rescaled_w = get_rescaled_h_w(img=img, 
+                                                                                output_image_size=output_image_size, 
+                                                                                ht=h, 
+                                                                                wd=w, 
+                                                                                pad=pad)
 
-    # Rescale the original img such that the disc boundary is square, and
-    # sized output_image_size - pad * 2
-    # if the entire img is going to be 512,512, then the disc extent
-    # should be 512 - pad*2
-    scale_factor_h, scale_factor_w, rescaled_h, rescaled_w = get_rescaled_h_w(img=img, 
-                                                                            output_image_size=output_image_size, 
-                                                                            ht=h, 
-                                                                            wd=w, 
-                                                                            pad=pad)
+        image_resized = img.resize((rescaled_w, rescaled_h))
 
-    image_resized = img.resize((rescaled_w, rescaled_h))
+        image_array_resized = np.array(image_resized)
 
-    image_array_resized = np.array(image_resized)
+        new_x, new_y, new_w, new_h = get_new_xy_wh(x_val=x, 
+                                                    y_val=y, 
+                                                    sf_w=scale_factor_w, 
+                                                    sf_h=scale_factor_h, 
+                                                    output_image_size=output_image_size, 
+                                                    pad=pad)
+    else:
+        x, y, w, h = get_square_bbox_coords(x, y, w, h, pad)
+        # Get the scale factor based on the longer side
+        scale_factor_h, scale_factor_w, rescaled_h, rescaled_w = get_rescaled_h_w_no_resize(img=img, 
+                                                                                output_image_size=output_image_size, 
+                                                                                ht=h, 
+                                                                                wd=w, 
+                                                                                pad=pad)
 
-    new_x, new_y, new_w, new_h = get_new_xy_wh(x_val=x, 
+        # Resize the image
+        image_resized = img.resize((rescaled_w, rescaled_h))
+        image_array_resized = np.array(image_resized)
+
+        # Get the final crop coordinates
+        new_x, new_y, new_w, new_h = get_new_xy_wh_no_resize(x_val=x, 
                                                 y_val=y, 
                                                 sf_w=scale_factor_w, 
                                                 sf_h=scale_factor_h, 
                                                 output_image_size=output_image_size, 
                                                 pad=pad)
-    
+
     new_x, new_y, new_w, new_h = keep_xywh_within_bounds(x=new_x, 
                                                             y=new_y, 
                                                             w=new_w, 
@@ -106,7 +178,7 @@ def get_cropped_image_and_info(best_coordinates, img, output_image_size, pad, fi
     return cropped_image_array, new_x, new_y, new_w, new_h, rescaled_w, rescaled_h
 
 
-def process_result(queue, res_i, image, filename, output_directory, batch_number, item_number, threshold=1e-6, output_img_size=512, padding=25, label_image=None, label_output_directory=None):
+def process_result(queue, res_i, image, filename, output_directory, batch_number, item_number, threshold=0.0, output_img_size=512, padding=25, label_image=None, label_output_directory=None):
     best_coords, best_conf = get_best_coords_and_conf(res_i, threshold)
     
     # if there was one, get the best one

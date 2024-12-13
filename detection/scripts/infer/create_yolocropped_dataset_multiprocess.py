@@ -30,7 +30,7 @@ def parse_args():
     parser.add_argument(
         "--threshold",
         type=float,
-        default=1e-6,
+        default=0.0,
         help="Confidence threshold for bounding box selection. Between 0 and 1. Use the visualize yolo script to see some values that work best, note the conf value",
     )
     parser.add_argument(
@@ -92,7 +92,7 @@ def main():
         for batch, batch_files, batch_labels in dataset:
             batch_num += 1
 
-            res = model(batch)
+            res = model(batch, conf=0)
             
             for i, result_i in enumerate(res):
                 file_name = batch_files[i]

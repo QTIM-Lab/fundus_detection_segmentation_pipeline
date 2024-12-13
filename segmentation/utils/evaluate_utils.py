@@ -10,7 +10,6 @@ from PIL import Image
 def image_pil_to_tensor(image_pil, eval_disc):
     # Load image as PIL image
     image = np.array(image_pil)
-    print('image shape: ', image.shape)
 
     # Convert PIL image to tensor and flatten to 1D
     tensor = torch.tensor(image).view(-1, 3)
@@ -46,7 +45,10 @@ def grayscale_to_image_pil(gray_image):
     image[gray_image == 127] = [0, 255, 0]  # Values that were 127 become green
     image[gray_image == 255] = [0, 0, 255]  # Values that were 255 become blue
 
+    assert not np.any(np.all(image == [0, 0, 0], axis=-1)), "There are still unassigned pixels (all zeros) in the image."
+
     return Image.fromarray(image)
+
 
 def process_row(row, prediction_folder, label_folder, eval_disc, jaccard_metric, dice_metric):
     image_filename = row['image_filename']
@@ -75,7 +77,7 @@ def process_row(row, prediction_folder, label_folder, eval_disc, jaccard_metric,
         dice_value = dice_metric(pred_tensor, label_tensor)
 
     print(f'Filename: {image_filename}, Jaccard: {jaccard_value}, Dice: {dice_value}')
-    return (row['dataset_name'], image_filename, label_filename, jaccard_value, dice_value)
+    return (row['dataset_name'], image_filename, label_filename, jaccard_value.item(), dice_value.item())
 
 def parallel_process(data, prediction_folder, label_folder, eval_disc, num_processes):
     # Define metrics

@@ -16,7 +16,7 @@ def get_gray_from_color(color_seg):
     return gray_image
 
 
-def yolo_inference_function(model, img_file_path, threshold=0, output_img_size=512, padding=25):
+def yolo_inference_function(model, img_file_path, threshold=0.0, output_img_size=512, padding=25):
     image = Image.open(img_file_path)
     orig_height = image.height
     orig_width = image.width
@@ -91,44 +91,44 @@ def seg_inference_function(model, img_pil, transform, preprocessor, palette, dev
     return gray_img
 
 
-def handle_file(filename, yolo_model, seg_model, transform, preprocessor, palette, device, output_dir):
+def handle_file(filename, yolo_model, seg_model, transform, preprocessor, palette, device, output_dir, detection_conf=0.0):
     print(filename)
     try:
-        cropped_img, orig_wh, recovered_wh, recovered_xyxy, recovered_resize = yolo_inference_function(yolo_model, filename)
+        cropped_img, orig_wh, recovered_wh, recovered_xyxy, recovered_resize = yolo_inference_function(yolo_model, filename, threshold=detection_conf)
+
+        cropped_img_np = np.array(cropped_img)
+
+        img_pil = Image.fromarray(cropped_img_np)
+
+        seg_output = seg_inference_function(seg_model, img_pil, transform, preprocessor, palette, device)
+
+        seg_output = Image.fromarray(seg_output).resize((recovered_resize[0], recovered_resize[1]))
+        seg_output = np.array(seg_output)
+
+        # Create a NumPy array filled with zeros
+        recovered_seg = np.zeros((int(recovered_wh[1]), int(recovered_wh[0])), dtype=np.uint8)
+
+        recovered_x0 = int(recovered_xyxy[0])
+        recovered_x1 = int(recovered_xyxy[2])
+        recovered_y0 = int(recovered_xyxy[1])
+        recovered_y1 = int(recovered_xyxy[3])
+
+        recovered_seg[recovered_y0:recovered_y1, recovered_x0:recovered_x1] = seg_output
+
+        recovered_seg_pil = Image.fromarray(recovered_seg).resize((orig_wh[0], orig_wh[1]))
+
+        image = np.array(recovered_seg_pil)
+        adjusted_image = np.zeros_like(image)  # Create an array of zeros with the same shape as the input image
+        adjusted_image[image < 64] = 0         # Values below 64 are set to 0
+        adjusted_image[(image >= 64) & (image <= 191)] = 127  # Values between 64 and 191 are set to 127
+        adjusted_image[image > 191] = 255      # Values above 191 are set to 255
+
+        recovered_seg_pil_threshold = Image.fromarray(adjusted_image)
+
+        output_path = os.path.join(output_dir, os.path.basename(filename.split('.')[0] + '.png'))
+        recovered_seg_pil_threshold.save(output_path)
     except Exception as e:
         print(f"Could not find {filename}!")
         print('error: ', e)
-        exit(0)
-        return filename
-
-    cropped_img_np = np.array(cropped_img)
-
-    img_pil = Image.fromarray(cropped_img_np)
-
-    seg_output = seg_inference_function(seg_model, img_pil, transform, preprocessor, palette, device)
-
-    seg_output = Image.fromarray(seg_output).resize((recovered_resize[0], recovered_resize[1]))
-    seg_output = np.array(seg_output)
-
-    # Create a NumPy array filled with zeros
-    recovered_seg = np.zeros((int(recovered_wh[1]), int(recovered_wh[0])), dtype=np.uint8)
-
-    recovered_x0 = int(recovered_xyxy[0])
-    recovered_x1 = int(recovered_xyxy[2])
-    recovered_y0 = int(recovered_xyxy[1])
-    recovered_y1 = int(recovered_xyxy[3])
-
-    recovered_seg[recovered_y0:recovered_y1, recovered_x0:recovered_x1] = seg_output
-
-    recovered_seg_pil = Image.fromarray(recovered_seg).resize((orig_wh[0], orig_wh[1]))
-
-    image = np.array(recovered_seg_pil)
-    adjusted_image = np.zeros_like(image)  # Create an array of zeros with the same shape as the input image
-    adjusted_image[image < 64] = 0         # Values below 64 are set to 0
-    adjusted_image[(image >= 64) & (image <= 191)] = 127  # Values between 64 and 191 are set to 127
-    adjusted_image[image > 191] = 255      # Values above 191 are set to 255
-
-    recovered_seg_pil = Image.fromarray(adjusted_image)
-    
-    output_path = os.path.join(output_dir, os.path.basename(filename))
-    recovered_seg_pil.save(output_path)
+        # exit(0)
+        # return filename
